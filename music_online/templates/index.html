@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    {% if song.source == 'youtube' %}
+        <div hidden id="player"></div>
+
+        <script src="http://www.youtube.com/player_api"></script>
+
+        <script>
+
+            // create youtube player
+            var player;
+            function onYouTubePlayerAPIReady() {
+                player = new YT.Player('player', {
+                    height: '600',
+                    width: '800',
+                    videoId: '{{ song_id }}',
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            }
+
+            // autoplay video
+            function onPlayerReady(event) {
+                event.target.playVideo();
+            }
+
+            // when video ends
+            function onPlayerStateChange(event) {
+                if (event.data === 0) {
+                    window.location.href = "{% url 'index' %}";
+                }
+            }
+
+        </script>
+    {% else %}
+{#         audio player #}
+        <audio hidden id="player" autoplay="true" controls>
+            <source src="{{ direct_link }}">
+        </audio>
+        <script>
+            var player = document.getElementById("player");
+            player.onended = function() {
+                alert("The audio has ended");
+            };
+        </script>
+    {% endif %}
+
+    {% if voice_message %}
+        {# voice message #}
+        <audio id="voice_message" volume=0.8 onloadeddata="" controls>
+            <source src="{{ voice_message }}">
+        </audio>
+        <script>
+            var voice_message = document.getElementById("voice_message");
+            voice_message.onloadeddata = function() {
+                var voiceMessagePlayer = this;
+                setTimeout(function() {
+                    voiceMessagePlayer.play();
+                }, 10000)
+            }
+            voice_message.onended = function() {
+                voice_message.pause();
+            };
+            voice_message.volume = 0.8;
+        </script>
+    {% endif %}
+
+</body>
+</html>

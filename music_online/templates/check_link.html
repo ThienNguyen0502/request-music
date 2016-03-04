@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Link</title>
+</head>
+<body>
+    {% if error %}
+        {% if error == 'input' %}
+            <p>Hãy nhập lại link</p>
+        {% elif error == 'fail' %}
+            <p>Hãy chọn link khác</p>
+        {% endif %}
+    {% elif result %}
+        {% if result.source != 'youtube' %}
+            {# audio player #}
+            <audio id="player" autoplay="true" controls>
+                <source src="{{ result.link }}">
+            </audio>
+        {% else %}
+            <div id="player"></div>
+            <script src="http://www.youtube.com/player_api"></script>
+
+            <script>
+
+                // create youtube player
+                var player;
+                function onYouTubePlayerAPIReady() {
+                    player = new YT.Player('player', {
+                        height: '600',
+                        width: '800',
+                        videoId: '{{ result.link }}',
+                        events: {
+                            'onReady': onPlayerReady
+                        }
+                    });
+                }
+
+                // autoplay video
+                function onPlayerReady(event) {
+                    event.target.playVideo();
+                }
+            </script>
+        {% endif %}
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="url">
+        <input type="submit">
+    </form>
+
+</body>
+</html>

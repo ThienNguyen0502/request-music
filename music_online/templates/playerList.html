@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Script Tutorials" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>HTML5 Audio player with playlist | Script Tutorials</title>
+
+    <!-- add styles and scripts -->
+    <link href="/static/css/styles.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/main.js"></script>
+</head>
+
+<div class="player">
+    <div class="pl"></div>
+    <div class="title"></div>
+    <div class="artist"></div>
+    <div class="cover"></div>
+    <div class="controls">
+        <div class="play"></div>
+        <div class="pause"></div>
+        <div class="rew"></div>
+        <div class="fwd"></div>
+    </div>
+    <div class="volume"></div>
+    <div class="tracker"></div>
+</div>
+<ul class="playlist hidden">
+    {% for song in songlist %}
+        <li artist="{{ song.sender }}" title="{{ song.song_name }}" audiourl="{{ song.source }}">{{ song.song_name }}</li>
+    {% endfor %}
+</ul>
+
+</html>
